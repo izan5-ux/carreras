@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carrera de Preguntas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+    }
+    #track {
+      width: 100%;
+      height: 150px;
+      background: #ddd;
+      position: relative;
+      margin: 20px 0;
+    }
+    #car {
+      width: 50px;
+      height: 50px;
+      background: red;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      transition: left 0.3s ease;
+    }
+    #question {
+      font-size: 1.2em;
+      margin: 20px;
+    }
+    .option {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .option:hover {
+      background: #2980b9;
+    }
+    #win {
+      display: none;
+      font-size: 2em;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>Carrera de Preguntas</h1>
+  <div id="track">
+    <div id="car"></div>
+  </div>
+  <div id="question"></div>
+  <div id="options"></div>
+  <div id="win">¡Ganaste!</div>
+
+  <script>
+    const preguntas = [
+      { q: "¿Qué empresa desarrolló un piloto automático más accesible basado solo en una cámara?", a: "Tesla", b: "Comma.ai", correct: "B" },
+      { q: "¿Cuál es el objetivo principal del modelo de auto usado en el proyecto?", a: "Realizar carreras de velocidad", b: "Completar una ruta respetando normas de tránsito", correct: "B" },
+      { q: "¿Qué empresa fabrica autos eléctricos con pilotos automáticos muy precisos, pero caros?", a: "Tesla", b: "Comma.ai", correct: "A" },
+      { q: "¿Qué evento fue usado como parte de la metodología del proyecto?", a: "Desafío Tesla Europa", b: "Bosch Future Mobility Challenge", correct: "B" },
+      { q: "¿Cuál es uno de los desafíos que todavía enfrentan los autos autónomos?", a: "Dificultad para detectar colores", b: "Dilemas éticos y problemas legales", correct: "B" }
+    ];
+
+    let current = 0;
+    let carPos = 0;
+    const step = 100 / preguntas.length;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const carEl = document.getElementById("car");
+    const winEl = document.getElementById("win");
+
+    function showQuestion() {
+      if (current >= preguntas.length) {
+        winEl.style.display = "block";
+        questionEl.innerHTML = "";
+        optionsEl.innerHTML = "";
+        return;
+      }
+
+      const p = preguntas[current];
+      questionEl.innerText = p.q;
+      optionsEl.innerHTML = "";
+
+      const btnA = document.createElement("div");
+      btnA.className = "option";
+      btnA.innerText = p.a;
+      btnA.onclick = () => checkAnswer("A");
+
+      const btnB = document.createElement("div");
+      btnB.className = "option";
+      btnB.innerText = p.b;
+      btnB.onclick = () => checkAnswer("B");
+
+      optionsEl.appendChild(btnA);
+      optionsEl.appendChild(btnB);
+    }
+
+    function checkAnswer(answer) {
+      if (answer === preguntas[current].correct) {
+        carPos += step;
+        carEl.style.left = `${carPos}%`;
+      }
+      current++;
+      showQuestion();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
